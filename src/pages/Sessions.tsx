@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import {
   getSessions,
@@ -21,6 +21,10 @@ export default function Sessions() {
   const [searchCoach, setSearchCoach] = useState('');
   const [filterUnpaidClient, setFilterUnpaidClient] = useState(false);
   const [filterUnpaidCoach, setFilterUnpaidCoach] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => () => clearTimeout(toastTimer.current), []);
 
   async function reload() {
     const data = await getSessions();
@@ -45,8 +49,13 @@ export default function Sessions() {
   }, [sessions, searchClient, searchCoach, filterUnpaidClient, filterUnpaidCoach]);
 
   async function handleAdd(data: SessionFormData) {
-    await addSession(data);
+    const result = await addSession(data);
     setShowForm(false);
+    if (result.packageUsed && result.packageInfo) {
+      const { sessionsUsed, totalSessions } = result.packageInfo;
+      setToast(`Package rate applied — ${sessionsUsed} of ${totalSessions} sessions used`);
+      toastTimer.current = setTimeout(() => setToast(null), 4000);
+    }
     await reload();
   }
 
@@ -81,6 +90,11 @@ export default function Sessions() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-6 right-6 z-50 animate-fade-in-up bg-accent/10 border border-accent/30 text-accent px-5 py-3 rounded-lg text-sm font-medium shadow-lg shadow-accent/5">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-4xl tracking-wide text-text-primary">Sessions</h1>

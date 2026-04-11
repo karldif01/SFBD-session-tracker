@@ -13,11 +13,12 @@ export interface Session {
   coach_paid: boolean;
   location: string;
   notes: string;
+  package_id?: string | null;
   created_at: string;
   updated_at: string;
 }
 
-export type SessionFormData = Omit<Session, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+export type SessionFormData = Omit<Session, 'id' | 'user_id' | 'package_id' | 'created_at' | 'updated_at'>;
 
 export interface ClientSummary {
   name: string;
@@ -40,4 +41,26 @@ export interface DashboardStats {
   unpaidClientBalance: number;
   unpaidCoachBalance: number;
   sessionsThisMonth: number;
+}
+
+export interface Package {
+  id: string;
+  user_id: string;
+  client_name: string;
+  total_sessions: number;
+  sessions_used: number;
+  total_price: number;
+  paid: boolean;
+  notes: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type PackageFormData = Omit<Package, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+
+export interface PackagePreset {
+  label: string;
+  total_sessions: number;
+  total_price: number;
+  notes: string;
 }

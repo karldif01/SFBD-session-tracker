@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Sessions from './pages/Sessions';
 import Clients from './pages/Clients';
+import Packages from './pages/Packages';
 import Coaches from './pages/Coaches';
 import AuthForm from './components/AuthForm';
 
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/clients" element={<Clients />} />
+          <Route path="/packages" element={<Packages />} />
           <Route path="/coaches" element={<Coaches />} />
         </Route>
       </Routes>

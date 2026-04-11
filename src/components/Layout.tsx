@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, CalendarDays, Users, UserCog, LogOut } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Users, Package, UserCog, LogOut } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/sessions', label: 'Sessions', icon: CalendarDays },
   { to: '/clients', label: 'Clients', icon: Users },
+  { to: '/packages', label: 'Packages', icon: Package },
   { to: '/coaches', label: 'Coaches', icon: UserCog },
 ];
 

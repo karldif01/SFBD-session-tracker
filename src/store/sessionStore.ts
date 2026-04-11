@@ -1,5 +1,17 @@
 import { supabase } from '../lib/supabase';
 import type { Session, SessionFormData, ClientSummary, CoachSummary, DashboardStats } from '../types';
+import { getActivePackageForClient, usePackageSession, restorePackageSession } from './packageStore';
+
+export interface AddSessionResult {
+  session: Session;
+  packageUsed: boolean;
+  packageInfo?: {
+    name: string;
+    sessionsUsed: number;
+    totalSessions: number;
+    sessionsRemaining: number;
+  };
+}
 
 export async function getSessions(): Promise<Session[]> {
   const { data, error } = await supabase
@@ -23,18 +35,48 @@ export async function getSession(id: string): Promise<Session | null> {
   return data;
 }
 
-export async function addSession(formData: SessionFormData): Promise<Session> {
+export async function addSession(formData: SessionFormData): Promise<AddSessionResult> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
+  const pkg = await getActivePackageForClient(formData.client_name);
+
+  const insertData: Record<string, unknown> = { ...formData, user_id: user.id };
+
+  if (pkg) {
+    insertData.client_price = pkg.total_price / pkg.total_sessions;
+    insertData.package_id = pkg.id;
+  }
+
   const { data, error } = await supabase
     .from('sessions')
-    .insert({ ...formData, user_id: user.id })
+    .insert(insertData)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+
+  if (pkg) {
+    try {
+      const updatedPkg = await usePackageSession(pkg.id);
+      return {
+        session: data,
+        packageUsed: true,
+        packageInfo: {
+          name: pkg.client_name,
+          sessionsUsed: updatedPkg.sessions_used,
+          totalSessions: updatedPkg.total_sessions,
+          sessionsRemaining: updatedPkg.total_sessions - updatedPkg.sessions_used,
+        },
+      };
+    } catch {
+      // Session was created but package counter failed to update — clean up
+      await supabase.from('sessions').delete().eq('id', data.id);
+      throw new Error('Failed to update package session count. Session was not created.');
+    }
+  }
+
+  return { session: data, packageUsed: false };
 }
 
 export async function updateSession(id: string, formData: Partial<SessionFormData>): Promise<Session> {
@@ -50,12 +92,23 @@ export async function updateSession(id: string, formData: Partial<SessionFormDat
 }
 
 export async function deleteSession(id: string): Promise<void> {
+  const session = await getSession(id);
+  const packageId = session?.package_id;
+
   const { error } = await supabase
     .from('sessions')
     .delete()
     .eq('id', id);
 
   if (error) throw error;
+
+  if (packageId) {
+    try {
+      await restorePackageSession(packageId);
+    } catch {
+      console.error('Session deleted but failed to restore package count for package:', packageId);
+    }
+  }
 }
 
 export async function toggleClientPaid(id: string): Promise<void> {
