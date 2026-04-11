@@ -86,6 +86,11 @@ export async function restorePackageSession(packageId: string): Promise<Package>
   return updatePackage(packageId, { sessions_used: pkg.sessions_used - 1 });
 }
 
+export async function getUniquePackageClientNames(): Promise<string[]> {
+  const packages = await getPackages();
+  return [...new Set(packages.map(p => p.client_name))].sort();
+}
+
 export function getPackagePresets(): PackagePreset[] {
   return [
     {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Package, PackageFormData } from '../types';
 import { X } from 'lucide-react';
-import { getPackagePresets } from '../store/packageStore';
+import { getPackagePresets, getUniquePackageClientNames } from '../store/packageStore';
 import { getUniqueClientNames } from '../store/sessionStore';
 import ComboBox from './ComboBox';
 
@@ -33,7 +33,12 @@ export default function PackageForm({ pkg, onSubmit, onClose }: PackageFormProps
   }, [pkg]);
 
   useEffect(() => {
-    getUniqueClientNames().then(setClientNames);
+    Promise.all([getUniqueClientNames(), getUniquePackageClientNames()]).then(
+      ([sessionClients, packageClients]) => {
+        const merged = [...new Set([...sessionClients, ...packageClients])].sort();
+        setClientNames(merged);
+      }
+    );
   }, []);
 
   function handleSubmit(e: React.FormEvent) {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Session, SessionFormData } from '../types';
 import { X } from 'lucide-react';
 import { getUniqueClientNames, getUniqueCoachNames } from '../store/sessionStore';
+import { getUniquePackageClientNames } from '../store/packageStore';
 import ComboBox from './ComboBox';
 
 interface SessionFormProps {
@@ -40,7 +41,11 @@ export default function SessionForm({ session, onSubmit, onClose }: SessionFormP
   }, [session]);
 
   useEffect(() => {
-    getUniqueClientNames().then(setClientNames);
+    Promise.all([getUniqueClientNames(), getUniquePackageClientNames()]).then(
+      ([sessionClients, packageClients]) => {
+        setClientNames([...new Set([...sessionClients, ...packageClients])].sort());
+      }
+    );
     getUniqueCoachNames().then(setCoachNames);
   }, []);
 
