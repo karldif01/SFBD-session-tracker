@@ -22,7 +22,7 @@ export default function Sessions() {
   const [filterUnpaidClient, setFilterUnpaidClient] = useState(false);
   const [filterUnpaidCoach, setFilterUnpaidCoach] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => () => clearTimeout(toastTimer.current), []);
 
