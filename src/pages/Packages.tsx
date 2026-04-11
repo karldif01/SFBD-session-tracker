@@ -27,9 +27,13 @@ export default function Packages() {
   }, []);
 
   async function handleAdd(data: PackageFormData) {
-    await addPackage(data);
-    setShowForm(false);
-    await reload();
+    try {
+      await addPackage(data);
+      setShowForm(false);
+      await reload();
+    } catch (err) {
+      alert('Failed to add package: ' + (err instanceof Error ? err.message : String(err)));
+    }
   }
 
   async function handleEdit(data: PackageFormData) {
