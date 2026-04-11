@@ -32,7 +32,7 @@ export default function Packages() {
       setShowForm(false);
       await reload();
     } catch (err) {
-      alert('Failed to add package: ' + (err instanceof Error ? err.message : String(err)));
+      alert('Failed to add package: ' + (err instanceof Error ? err.message : JSON.stringify(err)));
     }
   }
 
