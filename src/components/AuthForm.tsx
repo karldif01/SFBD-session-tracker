@@ -42,12 +42,15 @@ export default function AuthForm() {
       <div className="animate-fade-in-up w-full max-w-md relative">
         {/* Logo */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-accent/10 border border-accent/30 rounded-xl mb-4 relative">
-            <span className="font-display text-accent text-3xl tracking-wider">SF</span>
+          <img
+            src="/sfbd-logo-white.png"
+            alt="SFBD"
+            className="h-50 sm:h-60 w-auto max-w-[min(100%,28rem)] mx-auto mb-4 object-contain object-center [filter:drop-shadow(0_0_24px_rgba(0,212,170,0.2))]"
+          />
+          <div className="inline-flex items-center justify-center px-6 py-3 bg-accent/10 border border-accent/30 rounded-xl relative">
+            <span className="font-display text-accent text-3xl tracking-wider">SFBD Tracker</span>
             <div className="absolute inset-0 rounded-xl bg-accent/20 blur-lg -z-10" />
           </div>
-          <h1 className="font-display text-4xl tracking-wider text-text-primary">SFBD Tracker</h1>
-          <p className="text-text-muted text-sm mt-2">Session tracking for coaches & clients</p>
         </div>
 
         {/* Card */}
