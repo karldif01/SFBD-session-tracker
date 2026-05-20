@@ -22,7 +22,14 @@
       "Bash(./node_modules/.bin/tsc --noEmit)",
       "Bash(npx vite:*)",
       "Bash(/Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/node_modules/.bin/tsc --noEmit --project /Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/tsconfig.json)",
-      "Bash(/Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/node_modules/.bin/tsc --noEmit --project /Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/tsconfig.app.json)"
+      "Bash(/Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/node_modules/.bin/tsc --noEmit --project /Users/karljosefsson/Desktop/CodingFun/SFBD-session-tracker/tsconfig.app.json)",
+      "Read(//Users/karljosefsson/Desktop/SFBD/**)",
+      "Read(//Users/karljosefsson/Desktop/SFBD/SF DAY Spring 26 Invoices/**)",
+      "mcp__codebase-memory-mcp__index_status",
+      "Bash(curl -sS -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" -m 8 \"https://iwxkpnxeqgebqbetojdb.supabase.co/auth/v1/health\")",
+      "Bash(curl -sS -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" -m 8 \"https://iwxkpnxeqgebqbetojdb.supabase.co\")",
+      "Bash(curl -sS -o /dev/null -w \"supabase.com: HTTP %{http_code} in %{time_total}s\\\\n\" -m 8 \"https://supabase.com\")",
+      "Bash(nslookup iwxkpnxeqgebqbetojdb.supabase.co)"
     ]
   }
 }
